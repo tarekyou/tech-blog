@@ -28,4 +28,18 @@
 </section>
 {{/if}}
 
+{{!-- {{#if comments.length}}
+<section>
+  <h2>Your Comments</h2>
+  <ol>
+    {{#each comments as |comment|}}
+    <li>
+      {{> comments post.comments}}
+      <a href="/dashboard/edit/{{comment.id}}" class="edit-link">Edit comment</a>
+    </li>
+    {{/each}}
+  </ol>
+</section>
+{{/if}} --}}
+
 <script src="/javascript/add-post.js"></script>
