@@ -1,5 +1,4 @@
 const router = require('express').Router();
-const { noExtendLeft } = require('sequelize/dist/lib/operators');
 const { User, Post, Comment } = require("../../models");
 
 

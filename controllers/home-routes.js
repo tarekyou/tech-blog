@@ -128,11 +128,19 @@ router.get('/comment/:id', (req, res) => {
         // serialize the data
         const comment = dbCommentData.get({ plain: true });
         console.log(comment)
-
+        console.log(comment.user_id)
+        console.log( req.session.user_id)
+        if (comment.user_id === req.session.user_id){
         res.render('edit-comment', {
             comment,
             loggedIn: req.session.loggedIn
-          });
+          }); }
+          else {
+            res.render('homepage', {
+              comment,
+              loggedIn: req.session.loggedIn
+            });
+          }
       })
       .catch(err => {
         console.log(err);
