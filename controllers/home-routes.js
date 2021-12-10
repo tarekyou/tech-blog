@@ -85,10 +85,52 @@ router.get('/post/:id', (req, res) => {
   
         // serialize the data
         const post = dbPostData.get({ plain: true });
-  
+        console.log(post)
 
         res.render('single-post', {
             post,
+            loggedIn: req.session.loggedIn
+          });
+      })
+      .catch(err => {
+        console.log(err);
+        res.status(500).json(err);
+      });
+});
+
+
+
+router.get('/comment/:id', (req, res) => {
+    Comment.findOne({
+      where: {
+        id: req.params.id
+      },
+      attributes: [
+        'id',
+        'comment_text',
+        'user_id',
+        'post_id',
+        'createdAt'
+      ],
+      include: [
+        {
+          model: User,
+          attributes: ['username']
+        }
+      ]
+    })
+      .then(dbCommentData => {
+        if (!dbCommentData) {
+          res.status(404).json({ message: 'No comment found with this id' });
+          return;
+        }
+  
+        // serialize the data
+        const comment = dbCommentData.get({ plain: true });
+        console.log(comment)
+
+        res.render('edit-comment', {
+            comment,
             loggedIn: req.session.loggedIn
           });
       })

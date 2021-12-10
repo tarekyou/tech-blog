@@ -1,5 +1,7 @@
 const router = require('express').Router();
+const { noExtendLeft } = require('sequelize/dist/lib/operators');
 const { User, Post, Comment } = require("../../models");
+
 
 // GET /api/users
 router.get('/', (req, res) => {
@@ -51,7 +53,7 @@ router.get('/:id', (req, res) => {
 });
 
 // POST /api/users
-router.post('/', (req, res) => {
+router.post('/', (req, res, next) => {
     // expects {username: 'Lernantino', email: 'lernantino@gmail.com', password: 'password1234'}
   User.create({
     username: req.body.username,
@@ -64,7 +66,11 @@ router.post('/', (req, res) => {
       req.session.loggedIn = true;
   
       res.json(dbUserData);
-    });
+    }).catch(err =>{
+      res.status(500).json(err)
+      next()
+    })
+    ;
   })  
 
 });
@@ -79,12 +85,14 @@ router.post('/login', (req, res) => {
           res.status(400).json({ message: 'No user with that email address!' });
           return;
         }
+
  
         const validPassword = dbUserData.checkPassword(req.body.password);
         if (!validPassword) {
             res.status(400).json({ message: 'Incorrect password!' });
             return;
         }
+
           
           // res.json({ user: dbUserData, message: 'You are now logged in!' });
           req.session.save(() => {
@@ -96,8 +104,12 @@ router.post('/login', (req, res) => {
             res.json({ user: dbUserData, message: 'You are now logged in!' });
           });
         
-    
-      });  
+          
+      }).catch(err =>{
+        res.status(500).json(err)
+        
+      })
+      ;  
     });
 
 // PUT /api/users/1

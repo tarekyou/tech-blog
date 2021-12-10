@@ -8,6 +8,7 @@ async function signupFormHandler(event) {
 
 
     if (username &&  password) {
+      try{
         const response = await fetch('/api/users', {
           method: 'post',
           body: JSON.stringify({
@@ -25,6 +26,9 @@ async function signupFormHandler(event) {
               } else {
                 alert(response.statusText);
               }
+            } catch(err){
+              alert('duplicate user')
+            }
       }
 }
   

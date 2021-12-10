@@ -1,20 +1,30 @@
 
 
-{{#if loggedIn}}
-<article>
-  <a href="/dashboard"> &larr; Back to dashboard</a>
-  <h2>
-    Edit Comment
-  </h2>
-  <form class="edit-comment-form">
-    <div>
-       <textarea name="edit-comment" type="text" >{{> comments post.comments}}</textarea>
+<div class="comments">
+  {{!-- {{#each this}} --}}
+  <section class="comment" id="{{comment.id}}">
+    <div class="meta">
+      {{comment.user.username}} on {{format_date comment.createdAt}}
     </div>
-  </form>
-</article>
-{{/if}}
+    <div class="text">
+      {{!-- <a href="/comment/{{comment.id}}">
+      
+      <form class="comment-form">
+        <div> --}}
+      <textarea type="text" name="comment-body" >{{ comment.comment_text}}</textarea>
+        {{!-- </div> --}}
 
-
-{{#if loggedIn}}
-<script src="/javascript/comment.js"></script>
-{{/if}}
+      {{!-- <div>
+      <button type="submit">add comment</button>
+     </div>
+    </form>
+      </a> --}}
+    {{!-- {{#if loggedIn}} --}}
+    <button type="button" id="edit-comment-btn{{comment.id}}" >Edit comment</button>
+    <button type="button"  id="delete-comment-btn{{comment.id}}">Delete comment</button>
+    {{!-- {{/if}} --}}
+    </div>
+  </section>
+  {{!-- {{/each}} --}}
+</div>
+<script src="/javascript/edit-delete-comment.js"></script>
