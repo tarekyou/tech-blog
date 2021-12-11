@@ -5,13 +5,10 @@
       {{user.username}} on {{format_date created_at}}
     </div>
     <div class="text">
-      <a href="/comment/{{id}}">
       {{comment_text}}
+      <a href="/comment/{{id}}">
+      edit or delete
       </a>
-    {{!-- {{#if loggedIn}} --}}
-    {{!-- <button type="button" >Edit comment</button>
-    <button type="button"  class="delete-comment-btn">Delete comment</button> --}}
-    {{!-- {{/if}} --}}
     </div>
   </section>
   {{/each}}

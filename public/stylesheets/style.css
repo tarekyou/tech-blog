@@ -185,11 +185,17 @@
   
   .comment-form {
     margin-bottom: 5%;
+    background-color: linen;
   }
   
   .comment {
     padding: 1%;
     margin-bottom: 1%;
+  }
+
+  .text{
+    color: grey;
+    background-color: lightgoldenrodyellow;
   }
   
   .comment:nth-child(odd) {
@@ -210,6 +216,14 @@
     margin-bottom: 5%;
   }
   
+  .postdiv {
+    background-color: lightgreen;
+  }
+  
+  .content {
+    background-color: lightpink;
+  }
+
   footer {
     border-top: 1px solid #ccc;
     display: flex;

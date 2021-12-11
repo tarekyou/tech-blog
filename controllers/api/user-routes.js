@@ -53,7 +53,6 @@ router.get('/:id', (req, res) => {
 
 // POST /api/users
 router.post('/', (req, res, next) => {
-    // expects {username: 'Lernantino', email: 'lernantino@gmail.com', password: 'password1234'}
   User.create({
     username: req.body.username,
     password: req.body.password
@@ -66,8 +65,22 @@ router.post('/', (req, res, next) => {
   
       res.json(dbUserData);
     }).catch(err =>{
-      res.status(500).json(err)
+      if(err){
+        if (err.errno === 1062 || err.errcode === 'ER_DUP_ENTRY'){
+          res.redirect('/')
+          next()
+            return
+        }else{
+          console.log(err)
+          next()
+            return
+        }
+      }
+     else{
+       console.log(err)
+        res.status(500).json(err)
       next()
+     }
     })
     ;
   })  
@@ -84,16 +97,12 @@ router.post('/login', (req, res) => {
           res.status(400).json({ message: 'No user with that email address!' });
           return;
         }
-
  
         const validPassword = dbUserData.checkPassword(req.body.password);
         if (!validPassword) {
             res.status(400).json({ message: 'Incorrect password!' });
             return;
         }
-
-          
-          // res.json({ user: dbUserData, message: 'You are now logged in!' });
           req.session.save(() => {
             // declare session variables
             req.session.user_id = dbUserData.id;
@@ -102,8 +111,6 @@ router.post('/login', (req, res) => {
       
             res.json({ user: dbUserData, message: 'You are now logged in!' });
           });
-        
-          
       }).catch(err =>{
         res.status(500).json(err)
         

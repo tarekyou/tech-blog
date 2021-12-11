@@ -1,30 +1,15 @@
 
 
 <div class="comments">
-  {{!-- {{#each this}} --}}
   <section class="comment" id="{{comment.id}}">
     <div class="meta">
       {{comment.user.username}} on {{format_date comment.createdAt}}
     </div>
     <div class="text">
-      {{!-- <a href="/comment/{{comment.id}}">
-      
-      <form class="comment-form">
-        <div> --}}
       <textarea type="text" name="comment-body" >{{ comment.comment_text}}</textarea>
-        {{!-- </div> --}}
-
-      {{!-- <div>
-      <button type="submit">add comment</button>
-     </div>
-    </form>
-      </a> --}}
-    {{!-- {{#if loggedIn}} --}}
-    <button type="button" id="edit-comment-btn{{comment.id}}" >Edit comment</button>
+    <button type="button" class="upvote-btn " id="edit-comment-btn{{comment.id}}" >Edit comment</button>
     <button type="button"  id="delete-comment-btn{{comment.id}}">Delete comment</button>
-    {{!-- {{/if}} --}}
     </div>
   </section>
-  {{!-- {{/each}} --}}
 </div>
 <script src="/javascript/edit-delete-comment.js"></script>
