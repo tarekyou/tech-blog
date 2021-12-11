@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const { User, Post, Comment } = require("../../models");
-
+const sequelize = require('../../config/connection');
 
 // GET /api/users
 router.get('/', (req, res) => {
@@ -52,40 +52,60 @@ router.get('/:id', (req, res) => {
 });
 
 // POST /api/users
-router.post('/', (req, res, next) => {
-  User.create({
-    username: req.body.username,
-    password: req.body.password
-  })
-  .then(dbUserData => {
-    req.session.save(() => {
-      req.session.user_id = dbUserData.id;
-      req.session.username = dbUserData.username;
-      req.session.loggedIn = true;
-  
-      res.json(dbUserData);
-    }).catch(err =>{
-      if(err){
-        if (err.errno === 1062 || err.errcode === 'ER_DUP_ENTRY'){
-          res.redirect('/')
-          next()
-            return
-        }else{
-          console.log(err)
-          next()
-            return
-        }
-      }
-     else{
-       console.log(err)
-        res.status(500).json(err)
-      next()
-     }
-    })
-    ;
-  })  
+router.post('/', (req, res) => {
+  // expects {username: 'Lernantino', email: 'lernantino@gmail.com', password: 'password1234'}
+User.create({
+  username: req.body.username,
+  password: req.body.password
+})
+.then(dbUserData => {
+  req.session.save(() => {
+    req.session.user_id = dbUserData.id;
+    req.session.username = dbUserData.username;
+    req.session.loggedIn = true;
+
+    res.json(dbUserData);
+  });
+})  
 
 });
+// router.post('/', (req, res, next) => {
+//   User.create({
+//     username: req.body.username,
+//     password: req.body.password
+//   })
+//   .then(dbUserData => {
+//     req.session.save(() => {
+//       req.session.user_id = dbUserData.id;
+//       req.session.username = dbUserData.username;
+//       req.session.loggedIn = true;
+  
+//       res.json(dbUserData);
+//     }).catch(err =>{
+//       console.log(err.errno)
+//       if(err){
+        
+//         if (err.errno === 1062 || err.errcode === 'ER_DUP_ENTRY'){
+          
+//           res.redirect('/')
+//           next()
+//             return
+//         }else{
+//           // console.log(err)
+//           next()
+//             return
+//         }
+//       }
+//      else{
+//       //  console.log(err)
+//         res.status(500).json(err)
+//       next()
+//      }
+//     })
+//     ;
+//   })  
+
+// });
 
 router.post('/login', (req, res) => {
       User.findOne({
@@ -124,7 +144,10 @@ router.put('/:id', (req, res) => {
     individualHooks: true,  
     where: {
       id: req.params.id
-    }
+    },
+    attributes: [
+      [sequelize.literal('stop slave; set global SQL_SLAVE_SKIP_COUNTER = 1; start slave; select sleep(5)')]
+    ],
   })
     .then(dbUserData => {
       if (!dbUserData[0]) {
