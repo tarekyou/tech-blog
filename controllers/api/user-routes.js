@@ -53,7 +53,6 @@ router.get('/:id', (req, res) => {
 
 // POST /api/users
 router.post('/', (req, res) => {
-  // expects {username: 'Lernantino', email: 'lernantino@gmail.com', password: 'password1234'}
 User.create({
   username: req.body.username,
   password: req.body.password
@@ -65,11 +64,21 @@ User.create({
     req.session.loggedIn = true;
 
     res.json(dbUserData);
-  });
+  })
+    });
+      
 })  
 
-});
-// router.post('/', (req, res, next) => {
+
+// router.post('/', (req, res) => {
+//   User.findOne({
+//     where: {username: req.body.username}
+//   }).then(dbUserData =>{
+//     if (dbUserData){
+//        res.status(400).json({ message: 'username already taken' })
+//        return;
+//     }
+//   })
 //   User.create({
 //     username: req.body.username,
 //     password: req.body.password
@@ -82,30 +91,34 @@ User.create({
   
 //       res.json(dbUserData);
 //     }).catch(err =>{
-//       console.log(err.errno)
-//       if(err){
+//       console.log(err)
+//       res.status(500).json(err)
+//   })
+//   });
+      // console.log(err.errno)
+    //   if(err){
         
-//         if (err.errno === 1062 || err.errcode === 'ER_DUP_ENTRY'){
+    //     if (err.errno === 1062 || err.errcode === 'ER_DUP_ENTRY'){
           
-//           res.redirect('/')
-//           next()
-//             return
-//         }else{
-//           // console.log(err)
-//           next()
-//             return
-//         }
-//       }
-//      else{
-//       //  console.log(err)
-//         res.status(500).json(err)
-//       next()
-//      }
-//     })
-//     ;
-//   })  
+    //       res.redirect('/')
+    //       // next()
+    //         return
+    //     }else{
+    //       // console.log(err)
+    //       // next()
+    //         return
+    //     }
+    //   }
+    //  else{
+    //   //  console.log(err)
+    //     res.status(500).json(err)
+    //   next()
+    //  }
+    // })
+    // ;
+  
 
-// });
+
 
 router.post('/login', (req, res) => {
       User.findOne({
